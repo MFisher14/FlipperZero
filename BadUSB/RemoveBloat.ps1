@@ -974,4 +974,6 @@ Start-Process "$directory\Google\Chrome\Application\$version\Installer\setup.exe
 
 write-host "Completed"
 
+Set-ExecutionPolicy Restricted
+
 Stop-Transcript

