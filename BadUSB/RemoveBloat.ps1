@@ -65,9 +65,10 @@ Start-Transcript -Path "C:\ProgramData\Debloat\Debloat.log"
 ############################################################################################################
 
     #Removes AppxPackages
+    #Lenovo AI Meeting Manager is whitelisted in the beginning to prevent crashing later on. It is removed last.
     $WhitelistedApps = 'Microsoft.WindowsNotepad|Microsoft.CompanyPortal|Microsoft.ScreenSketch|Microsoft.Paint3D|Microsoft.WindowsCalculator|Microsoft.WindowsStore|Microsoft.Windows.Photos|CanonicalGroupLimited.UbuntuonWindows|`
     |Microsoft.MicrosoftStickyNotes|Microsoft.MSPaint|Microsoft.WindowsCamera|.NET|Framework|`
-    Microsoft.HEIFImageExtension|Microsoft.ScreenSketch|Microsoft.StorePurchaseApp|Microsoft.VP9VideoExtensions|Microsoft.WebMediaExtensions|Microsoft.WebpImageExtension|Microsoft.DesktopAppInstaller|WindSynthBerry|MIDIBerry|Slack'
+    Microsoft.HEIFImageExtension|Microsoft.ScreenSketch|Microsoft.StorePurchaseApp|Microsoft.VP9VideoExtensions|Microsoft.WebMediaExtensions|Microsoft.WebpImageExtension|Microsoft.DesktopAppInstaller|WindSynthBerry|MIDIBerry|Slack|E046963F.AIMeetingManager'
     #NonRemovable Apps that where getting attempted and the system would reject the uninstall, speeds up debloat and prevents 'initalizing' overlay when removing apps
     $NonRemovable = '1527c705-839a-4832-9118-54d4Bd6a0c89|c5e2524a-ea46-4f67-841f-6a9465d9d515|E2A4F912-2574-4A75-9BB0-0D023378592B|F46D4000-FD22-4DB4-AC8E-4E1DDDE828FE|InputApp|Microsoft.AAD.BrokerPlugin|Microsoft.AccountsControl|`
     Microsoft.BioEnrollment|Microsoft.CredDialogHost|Microsoft.ECApp|Microsoft.LockApp|Microsoft.MicrosoftEdgeDevToolsClient|Microsoft.MicrosoftEdge|Microsoft.PPIProjection|Microsoft.Win32WebViewHost|Microsoft.Windows.Apprep.ChxApp|`
@@ -77,7 +78,7 @@ Start-Transcript -Path "C:\ProgramData\Debloat\Debloat.log"
     Get-AppxPackage -AllUsers | Where-Object {$_.Name -NotMatch $WhitelistedApps -and $_.Name -NotMatch $NonRemovable} | Remove-AppxPackage
     Get-AppxPackage -allusers | Where-Object {$_.Name -NotMatch $WhitelistedApps -and $_.Name -NotMatch $NonRemovable} | Remove-AppxPackage
     Get-AppxProvisionedPackage -Online | Where-Object {$_.PackageName -NotMatch $WhitelistedApps -and $_.PackageName -NotMatch $NonRemovable} | Remove-AppxProvisionedPackage -Online
-
+    
 
 ##Remove bloat
     $Bloatware = @(
@@ -105,8 +106,7 @@ Start-Transcript -Path "C:\ProgramData\Debloat\Debloat.log"
         "Microsoft.Office.Todo.List"
         "Microsoft.Whiteboard"
         "Microsoft.WindowsAlarms"
-        #"Microsoft.WindowsCamera"
-        "microsoft.windowscommunicationsapps"
+        "Microsoft.windowscommunicationsapps"
         "Microsoft.WindowsFeedbackHub"
         "Microsoft.WindowsMaps"
         "Microsoft.WindowsSoundRecorder"
@@ -145,15 +145,6 @@ Start-Transcript -Path "C:\ProgramData\Debloat\Debloat.log"
         "clipchamp.clipchamp"
         "*gaming*"
         "MicrosoftCorporationII.MicrosoftFamily"
-        #Optional: Typically not removed but you can if you need to for some reason
-        #"*Microsoft.Advertising.Xaml_10.1712.5.0_x64__8wekyb3d8bbwe*"
-        #"*Microsoft.Advertising.Xaml_10.1712.5.0_x86__8wekyb3d8bbwe*"
-        #"*Microsoft.BingWeather*"
-        #"*Microsoft.MSPaint*"
-        #"*Microsoft.MicrosoftStickyNotes*"
-        #"*Microsoft.Windows.Photos*"
-        #"*Microsoft.WindowsCalculator*"
-        #"*Microsoft.WindowsStore*"
 
     )
     foreach ($Bloat in $Bloatware) {
@@ -295,38 +286,6 @@ Start-Transcript -Path "C:\ProgramData\Debloat\Debloat.log"
         New-Item $Live
     }
     Set-ItemProperty $Live  NoTileApplicationNotification -Value 1 
-        
-    #Turns off Data Collection via the AllowTelemtry key by changing it to 0
-    # This is needed for Intune reporting to work, uncomment if using via other method
-    #Write-Host "Turning off Data Collection"
-    #$DataCollection1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-    #$DataCollection2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-    #$DataCollection3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"    
-    #If (Test-Path $DataCollection1) {
-    #    Set-ItemProperty $DataCollection1  AllowTelemetry -Value 0 
-    #}
-    #If (Test-Path $DataCollection2) {
-    #    Set-ItemProperty $DataCollection2  AllowTelemetry -Value 0 
-    #}
-    #If (Test-Path $DataCollection3) {
-    #    Set-ItemProperty $DataCollection3  AllowTelemetry -Value 0 
-    #}
-    
-
-###Enable location tracking for "find my device", uncomment if you don't need it
-
-    #Disabling Location Tracking
-    #Write-Host "Disabling Location Tracking"
-    #$SensorState = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
-    #$LocationConfig = "HKLM:\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration"
-    #If (!(Test-Path $SensorState)) {
-    #    New-Item $SensorState
-    #}
-    #Set-ItemProperty $SensorState SensorPermissionState -Value 0 
-    #If (!(Test-Path $LocationConfig)) {
-    #    New-Item $LocationConfig
-    #}
-    #Set-ItemProperty $LocationConfig Status -Value 0 
         
     #Disables People icon on Taskbar
     Write-Host "Disabling People icon on Taskbar"
@@ -596,7 +555,6 @@ $UninstallPrograms = @(
     "AD2F1837.HPPowerManager"
     "AD2F1837.HPPrivacySettings"
     "AD2F1837.HPQuickDrop"
-    #"AD2F1837.HPSupportAssistant"
     "AD2F1837.HPSystemInformation"
     "AD2F1837.myHP"
     "RealtekSemiconductorCorp.HPAudioControl",
@@ -758,13 +716,7 @@ $InstalledPrograms | ForEach-Object {
 }
 
 
-if ($manufacturer -ccontains "Lenovo") {
-    Write-Host "Lenovo detected"
-    #Remove HP bloat
-
-##Lenovo Specific
-
-}
+#Lenovo Runs Last Due to AI Meeting Manager
 
 
 ############################################################################################################
@@ -883,34 +835,44 @@ foreach($obj32 in $InstalledSoftware32){
 }
 
 ##Remove Chrome
-$chrome32path = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome"
+#$chrome32path = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome"
 
-if ($null -ne $chrome32path) {
+#if ($null -ne $chrome32path) {
+#
+#$versions = (Get-ItemProperty -path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome').version
+#ForEach ($version in $versions) {
+#write-host "Found Chrome version $version"
+#$directory = ${env:ProgramFiles(x86)}
+#write-host "Removing Chrome"
+#Start-Process "$directory\Google\Chrome\Application\$version\Installer\setup.exe" -argumentlist  "--uninstall --multi-install --chrome --system-level --force-uninstall"
+#}
+#
+#}
 
-$versions = (Get-ItemProperty -path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome').version
-ForEach ($version in $versions) {
-write-host "Found Chrome version $version"
-$directory = ${env:ProgramFiles(x86)}
-write-host "Removing Chrome"
-Start-Process "$directory\Google\Chrome\Application\$version\Installer\setup.exe" -argumentlist  "--uninstall --multi-install --chrome --system-level --force-uninstall"
+#$chromepath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome"
+
+#if ($null -ne $chromepath) {
+#
+#$versions = (Get-ItemProperty -path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome').version
+#ForEach ($version in $versions) {
+#write-host "Found Chrome version $version"
+#$directory = ${env:ProgramFiles}
+#write-host "Removing Chrome"
+#Start-Process "$directory\Google\Chrome\Application\$version\Installer\setup.exe" -argumentlist  "--uninstall --multi-install --chrome --system-level --force-uninstall"
+#}
+
+
+#}
+
 }
 
-}
 
-$chromepath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome"
+if ($manufacturer -ccontains "Lenovo") {
+    Write-Host "Lenovo detected"
+    #Remove Lenovo bloat
 
-if ($null -ne $chromepath) {
-
-$versions = (Get-ItemProperty -path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome').version
-ForEach ($version in $versions) {
-write-host "Found Chrome version $version"
-$directory = ${env:ProgramFiles}
-write-host "Removing Chrome"
-Start-Process "$directory\Google\Chrome\Application\$version\Installer\setup.exe" -argumentlist  "--uninstall --multi-install --chrome --system-level --force-uninstall"
-}
-
-
-}
+##Lenovo Specific
+Get-AppxPackage -AllUsers | Where-Object {$_.Name -Match "E046963F.AIMeetingManager"} | Remove-AppxPackage
 
 }
 
