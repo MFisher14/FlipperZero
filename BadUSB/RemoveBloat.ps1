@@ -99,7 +99,6 @@ Start-Transcript -Path "C:\ProgramData\Debloat\Debloat.log"
         "Microsoft.OneConnect"
         "Microsoft.People"
         "Microsoft.Print3D"
-        "Microsoft.RemoteDesktop"
         "Microsoft.SkypeApp"
         "Microsoft.StorePurchaseApp"
         "Microsoft.Office.Todo.List"
@@ -154,6 +153,7 @@ Start-Transcript -Path "C:\ProgramData\Debloat\Debloat.log"
         #"*Microsoft.Windows.Photos*"
         #"*Microsoft.WindowsCalculator*"
         #"*Microsoft.WindowsStore*"
+        #"Microsoft.RemoteDesktop"
 
     )
     foreach ($Bloat in $Bloatware) {
